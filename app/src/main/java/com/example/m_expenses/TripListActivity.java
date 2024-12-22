@@ -3,10 +3,12 @@ package com.example.m_expenses;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
@@ -14,12 +16,19 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class TripListActivity extends AppCompatActivity implements View.OnClickListener,
         AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
 
     private AppDb db;
     private ListView listTrip;
     private FloatingActionButton floatingAddActionButton;
+
+    private ArrayAdapter<Trips> adapter;
+    private List<Trips> tripList; // A list to hold all trips for searching
 
     @Override
     protected void onStart() {
@@ -36,10 +45,13 @@ public class TripListActivity extends AppCompatActivity implements View.OnClickL
 
         db = new AppDb(this);
         listTrip = findViewById(R.id.listTrip);
+
         listTrip.setOnItemClickListener(this);
         listTrip.setOnItemLongClickListener(this);
         findViewById(R.id.floatingAddActionButton).setOnClickListener(this);
+
     }
+
 
     public void refreshTripList() { // VIEW/SELECT
         Trips[] trips = db.getTrips();
@@ -50,6 +62,8 @@ public class TripListActivity extends AppCompatActivity implements View.OnClickL
             return;
         }
 
+        // Populate tripList and set up adapter
+        tripList = new ArrayList<>(Arrays.asList(trips));
         ArrayAdapter<Trips> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, trips);
         listTrip.setAdapter(adapter);
     }
@@ -74,6 +88,10 @@ public class TripListActivity extends AppCompatActivity implements View.OnClickL
         intent.putExtra("TRIP_ESTIMATED_SPENDING", trips.getEstimatedSpending());
         intent.putExtra("TRIP_TYPE", trips.getTripTypeOption());
         startActivity(intent);
+
+        Intent addExpenseIntent = new Intent(this, AddExpenseActivity.class);
+        intent.putExtra("TRIP_ID", trips.getTripId()); // Pass the trip ID to the new activity
+        startActivity(addExpenseIntent);
     }
 
     @Override

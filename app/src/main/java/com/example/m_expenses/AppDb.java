@@ -184,4 +184,18 @@ public class AppDb extends SQLiteOpenHelper {
         db.close();
         return isUpdated;
     }
+
+    public boolean addExpense(Expenses expenses) {
+        // Example of adding an expense to the database
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("tripId", expenses.getTripId());
+        values.put("description", expenses.getDescription());
+        values.put("amount", expenses.getAmount());
+        values.put("date", expenses.getDate());
+
+        long result = db.insert("Expenses", null, values);
+        return result != -1;  // Returns true if insert was successful
+    }
+
 }

@@ -17,7 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-    private Button add_trip_button, backToTripListButton, pickDateButton;
+    private Button add_trip_button, backToTripListButton, pickDateButton, addExpenseButton;
     private EditText trip_name_text, tripDateEditText, destination_text, description_text, estimated_spending_text;
     private RadioButton yes_radioButton, no_radioButton, casual_radioButton, business_radioButton, others_radioButton;
     private RadioGroup rs_radioGroup, tt_radioGroup;
@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         yes_radioButton = findViewById(R.id.rs_yes_button);
         no_radioButton = findViewById(R.id.rs_no_button);
         estimated_spending_text = findViewById(R.id.estimated_spending_text);
+        addExpenseButton = findViewById(R.id.addExpenseButton);
         tt_radioGroup = findViewById(R.id.tt_radioGroup);
         business_radioButton = findViewById(R.id.business_radioButton);
         casual_radioButton = findViewById(R.id.casual_radioButton);
@@ -56,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // Set listeners
         findViewById(R.id.backToTripListButton).setOnClickListener(this);
         findViewById(R.id.add_trip_button).setOnClickListener(this);
+        addExpenseButton.setOnClickListener(this);
         pickDateButton.setOnClickListener(this); // Set listener for date picker button
 
         appDb = new AppDb(this);
@@ -156,12 +158,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         dialog.dismiss();
                     })
                     .show();
-        } else if (view.getId() == R.id.backToTripListButton) {
+        }
+        else if (view.getId() == R.id.backToTripListButton) {
             // Navigate back to TripListActivity
             Intent intent = new Intent(MainActivity.this, TripListActivity.class);
             startActivity(intent); // Start TripListActivity
             finish(); // Close the current activity
-        } else if (view.getId() == R.id.pickDateButton) {
+        }
+        else if (view.getId() == R.id.pickDateButton) {
             // Show DatePickerDialog
             Calendar calendar = Calendar.getInstance();
             if (selectedDate != 0) {
@@ -182,6 +186,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Log.d("DatePicker", "Selected Date: " + selectedDate);
                 Toast.makeText(MainActivity.this, "Date selected: " + formattedDate, Toast.LENGTH_SHORT).show();
             }, currentYear, currentMonth, currentDay).show();
+        }
+        else if (view.getId() == R.id.addExpenseButton) {
+            // Navigate to ExpenseListActivity and pass the tripId
+            Intent intent = new Intent(MainActivity.this, ExpenseListActivity.class);
+            intent.putExtra("TRIP_ID", tripId); // Pass the current trip ID
+            startActivity(intent);
         }
     }
 

@@ -46,6 +46,29 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/trip_name_text" />
 
+        <Button
+            android:id="@+id/pickDateButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Pick a date"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/date_of_trip_textview" />
+
+        <EditText
+            android:id="@+id/tripDateEditText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:clickable="true"
+            android:ems="10"
+            android:focusable="false"
+            android:hint="Selected date"
+            android:inputType="none"
+            android:minHeight="48dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/pickDateButton" />
+
         <TextView
             android:id="@+id/destination_textview"
             android:layout_width="wrap_content"
@@ -116,7 +139,7 @@
         android:layout_height="wrap_content"
         android:ems="10"
 
-        android:hint="Meeting the salaryman"
+        android:hint="Meeting the salesman"
         android:inputType="textMultiLine"
         android:minHeight="48dp"
         android:minLines="3"
@@ -151,14 +174,31 @@
             app:layout_constraintTop_toBottomOf="@+id/estimated_spending_textview" />
 
         <TextView
+            android:id="@+id/expensesTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Expenses"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/estimated_spending_text" />
+
+        <Button
+            android:id="@+id/addExpenseButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Add Expenses"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/expensesTextView" />
+
+        <TextView
             android:id="@+id/trip_type_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:text="Trip type"
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/estimated_spending_text" />
+            app:layout_constraintTop_toBottomOf="@+id/addExpenseButton" />
 
         <RadioGroup
             android:id="@+id/tt_radioGroup"
@@ -222,29 +262,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintGuide_percent="0.5"
             app:layout_constraintStart_toStartOf="parent" />
-
-        <Button
-            android:id="@+id/pickDateButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="Pick a date"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/date_of_trip_textview" />
-
-        <EditText
-            android:id="@+id/tripDateEditText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:ems="10"
-            android:hint="Selected date"
-            android:focusable="false"
-            android:clickable="true"
-            android:inputType="none"
-            android:minHeight="48dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/pickDateButton" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
