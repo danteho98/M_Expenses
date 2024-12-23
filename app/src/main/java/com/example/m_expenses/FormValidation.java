@@ -27,11 +27,6 @@ public class FormValidation {
             return false;
         }
 
-        // Validate date selection
-//        if (!isValidDate(tripDate)) {
-//            Toast.makeText(context, "Please select a valid trip date", Toast.LENGTH_SHORT).show();
-//            return false;
-//        }
 
         // Validate destination
         if (TextUtils.isEmpty(destination.getText().toString().trim())) {
@@ -44,14 +39,6 @@ public class FormValidation {
             Toast.makeText(context, "Please select a risk assessment option", Toast.LENGTH_SHORT).show();
             return false;
         }
-
-        // (Optional) Validate description
-    /*
-    if (TextUtils.isEmpty(description.getText().toString().trim())) {
-        description.setError("Description is required");
-        return false;
-    }
-    */
 
         // Validate estimated spending
         if (TextUtils.isEmpty(estimatedSpending.getText().toString().trim())) {
@@ -68,27 +55,29 @@ public class FormValidation {
         return true; // All inputs are valid
     }
 
-//    private static boolean isValidDate(long selectedDate) {
-//        // Debugging log to check the value of the selected date
-//        Log.d("FormValidation", "Selected date: " + selectedDate);
-//
-//        if (selectedDate == 0) {
-//            return false; // Invalid date
-//        }
-//
-//        Calendar today = Calendar.getInstance();
-//        long currentTimestamp = today.getTimeInMillis();
-//
-//        Calendar oneYearFromToday = Calendar.getInstance();
-//        oneYearFromToday.add(Calendar.YEAR, 1);
-//        long oneYearFromNowTimestamp = oneYearFromToday.getTimeInMillis();
-//
-//        // Debug log for the range check
-//        Log.d("FormValidation", "Current date: " + currentTimestamp);
-//        Log.d("FormValidation", "One year from today: " + oneYearFromNowTimestamp);
-//        Log.d("FormValidation", "Selected date range check: " + (selectedDate >= currentTimestamp && selectedDate <= oneYearFromNowTimestamp));
-//
-//        return selectedDate >= currentTimestamp && selectedDate <= oneYearFromNowTimestamp;
-//    }
+    // Validation method for expenses
+    public boolean validateExpenseForm(EditText expenseName,
+                                       RadioGroup expenseType,
+                                       EditText costAmount,
+                                       long selectedDate) {
+        // Validate expense name
+        if (TextUtils.isEmpty(expenseName.getText().toString().trim())) {
+            expenseName.setError("Expense name is required");
+            return false;
+        }
 
+        // Validate expense type
+        if (expenseType.getCheckedRadioButtonId() == -1) {
+            Toast.makeText(context, "Please select an expense type", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        // Validate cost amount
+        if (TextUtils.isEmpty(costAmount.getText().toString().trim())) {
+            costAmount.setError("Cost amount is required");
+            return false;
+        }
+
+        return true; // All inputs are valid
+    }
 }

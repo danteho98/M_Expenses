@@ -89,9 +89,6 @@ public class TripListActivity extends AppCompatActivity implements View.OnClickL
         intent.putExtra("TRIP_TYPE", trips.getTripTypeOption());
         startActivity(intent);
 
-        Intent addExpenseIntent = new Intent(this, AddExpenseActivity.class);
-        intent.putExtra("TRIP_ID", trips.getTripId()); // Pass the trip ID to the new activity
-        startActivity(addExpenseIntent);
     }
 
     @Override

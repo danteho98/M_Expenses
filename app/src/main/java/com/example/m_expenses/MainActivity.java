@@ -190,7 +190,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         else if (view.getId() == R.id.addExpenseButton) {
             // Navigate to ExpenseListActivity and pass the tripId
             Intent intent = new Intent(MainActivity.this, ExpenseListActivity.class);
-            intent.putExtra("TRIP_ID", tripId); // Pass the current trip ID
+            intent.putExtra("EXPENSETRIP_ID", tripId); // Pass the current trip ID
             startActivity(intent);
         }
     }
