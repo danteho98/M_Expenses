@@ -174,31 +174,13 @@
             app:layout_constraintTop_toBottomOf="@+id/estimated_spending_textview" />
 
         <TextView
-            android:id="@+id/expensesTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="Expenses"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/estimated_spending_text" />
-
-        <Button
-            android:id="@+id/addExpenseButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="Add Expenses"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/expensesTextView" />
-
-        <TextView
             android:id="@+id/trip_type_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Trip type"
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/addExpenseButton" />
+            app:layout_constraintTop_toBottomOf="@+id/estimated_spending_text" />
 
         <RadioGroup
             android:id="@+id/tt_radioGroup"

@@ -61,7 +61,7 @@ public class AppDb extends SQLiteOpenHelper {
 
     public boolean addTrips(Trips trips) {
         boolean isAdded = false;
-
+        Log.d("AppDb", "Adding TripId: " + trips.getTripId());
         ContentValues cv = new ContentValues();
 
         cv.put(COLUMN_TRIP_NAME, trips.getTripName());
@@ -204,7 +204,7 @@ public class AppDb extends SQLiteOpenHelper {
 
     public boolean addExpense(Expenses expenses) {
         boolean isAdded = false;
-
+        Log.d("AppDb", "Adding expense with TripId: " + expenses.getTripId());
         ContentValues cv = new ContentValues();
         cv.put(COLUMN_EXPENSETRIP_ID, expenses.getTripId());
         cv.put(COLUMN_EXPENSE_NAME, expenses.getExpenseName());
