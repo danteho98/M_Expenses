@@ -16,7 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.Calendar;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class AddTripActivity extends AppCompatActivity implements View.OnClickListener {
     private Button add_trip_button, backToTripListButton, pickDateButton, addExpenseButton;
     private EditText trip_name_text, tripDateEditText, destination_text, description_text, estimated_spending_text;
     private RadioButton yes_radioButton, no_radioButton, casual_radioButton, business_radioButton, others_radioButton;
@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_add_trip);
 
         setTitle("M-Expense");
 
@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         appDb = new AppDb(this);
 
         // Initialize FormValidation
-        formValidation = new FormValidation(MainActivity.this);
+        formValidation = new FormValidation(AddTripActivity.this);
 
         // Load existing trip details if tripId is not NEW_TRIP
         if (tripId != Trips.NEW_TRIP) {
@@ -75,7 +75,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if (tripDate != 0) {
                     Calendar calendar = Calendar.getInstance();
                     calendar.setTimeInMillis(tripDate);
-                    String formattedDate = String.format("%04d-%02d-%02d",
+                    String formattedDate = String.format(
+                            "%04d-%02d-%02d",
                             calendar.get(Calendar.YEAR),
                             calendar.get(Calendar.MONTH) + 1,
                             calendar.get(Calendar.DAY_OF_MONTH));
@@ -141,7 +142,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
 
             // Show AlertDialog for confirmation
-            new AlertDialog.Builder(MainActivity.this)
+            new AlertDialog.Builder(AddTripActivity.this)
                     .setTitle("Confirm Trip")
                     .setMessage("Are you sure you want to save this trip?")
                     .setPositiveButton("OK", (dialog, which) -> {
@@ -160,7 +161,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         else if (view.getId() == R.id.backToTripListButton) {
             // Navigate back to TripListActivity
-            Intent intent = new Intent(MainActivity.this, TripListActivity.class);
+            Intent intent = new Intent(AddTripActivity.this, TripListActivity.class);
             startActivity(intent); // Start TripListActivity
             finish(); // Close the current activity
         }
@@ -174,7 +175,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             int currentMonth = calendar.get(Calendar.MONTH);
             int currentDay = calendar.get(Calendar.DAY_OF_MONTH);
 
-            new DatePickerDialog(MainActivity.this, (datePickerView, selectedYear, selectedMonth, selectedDay) -> {
+            new DatePickerDialog(AddTripActivity.this, (datePickerView, selectedYear, selectedMonth, selectedDay) -> {
                 calendar.set(selectedYear, selectedMonth, selectedDay);
                 selectedDate = calendar.getTimeInMillis();
 
@@ -183,7 +184,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 tripDateEditText.setText(formattedDate);
 
                 Log.d("DatePicker", "Selected Date: " + selectedDate);
-                Toast.makeText(MainActivity.this, "Date selected: " + formattedDate, Toast.LENGTH_SHORT).show();
+                Toast.makeText(AddTripActivity.this, "Date selected: " + formattedDate, Toast.LENGTH_SHORT).show();
             }, currentYear, currentMonth, currentDay).show();
         }
     }

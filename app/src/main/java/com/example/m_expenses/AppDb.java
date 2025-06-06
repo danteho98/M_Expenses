@@ -14,7 +14,8 @@ public class AppDb extends SQLiteOpenHelper {
     private static final String DB_NAME = "app.db";
     private static final int DB_VERSION = 1;
 
-    private static final String CREATE_TABLE_TRIP = "CREATE TABLE IF NOT EXISTS `Trips` (`TripId` INTEGER PRIMARY KEY AUTOINCREMENT, " +
+    private static final String CREATE_TABLE_TRIP = "CREATE TABLE IF NOT EXISTS `Trips` (" +
+            "`TripId` INTEGER PRIMARY KEY AUTOINCREMENT, " +
             "`TripName` TEXT, `DateOfTrip` NUMERIC, " +
             "`Destination` TEXT, `RiskAssess` TEXT," +
             "`Description` TEXT, `EstimatedSpending` INTEGER, `TripType` TEXT)";

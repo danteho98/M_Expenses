@@ -3,12 +3,10 @@ package com.example.m_expenses;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.SearchView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
@@ -21,7 +19,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class TripListActivity extends AppCompatActivity implements View.OnClickListener,
-        AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
+        AdapterView.OnItemClickListener {
 
     private AppDb db;
     private ListView listTrip;
@@ -39,7 +37,7 @@ public class TripListActivity extends AppCompatActivity implements View.OnClickL
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_trip_list_activty);
+        setContentView(R.layout.activity_trip_list);
 
         setTitle("Trip Database");
 
@@ -47,7 +45,7 @@ public class TripListActivity extends AppCompatActivity implements View.OnClickL
         listTrip = findViewById(R.id.listTrip);
 
         listTrip.setOnItemClickListener(this);
-        listTrip.setOnItemLongClickListener(this);
+        //listTrip.setOnItemLongClickListener(this);
         findViewById(R.id.floatingAddActionButton).setOnClickListener(this);
 
     }
@@ -70,7 +68,7 @@ public class TripListActivity extends AppCompatActivity implements View.OnClickL
 
     @Override
     public void onClick(View view) { // ADD
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, AddTripActivity.class);
         intent.putExtra("TRIP_ID", Trips.NEW_TRIP);
         startActivity(intent);
     }
@@ -78,20 +76,58 @@ public class TripListActivity extends AppCompatActivity implements View.OnClickL
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) { // EDIT
         Trips trips = (Trips) adapterView.getItemAtPosition(position);
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra("TRIP_ID", trips.getTripId());
-        intent.putExtra("TRIP_NAME", trips.getTripName());
-        intent.putExtra("TRIP_DATE_OF_TRIP", trips.getDateOfTrip());
-        intent.putExtra("DESTINATION", trips.getDestination());
-        intent.putExtra("RISK_ASSESS",trips.getRiskAssessOption());
-        intent.putExtra("DESCRIPTION",trips.getDescription());
-        intent.putExtra("TRIP_ESTIMATED_SPENDING", trips.getEstimatedSpending());
-        intent.putExtra("TRIP_TYPE", trips.getTripTypeOption());
-        startActivity(intent);
 
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(trips.getTripName())
+                .setItems(new String[]{"View/Edit Trip", "Add Expense", "Delete Trip"},
+                        ((dialog, which) -> {
+                    switch (which){
+                        case 0:
+                            Intent intent = new Intent(this, AddTripActivity.class);
+                            intent.putExtra("TRIP_ID", trips.getTripId());
+                            intent.putExtra("TRIP_NAME", trips.getTripName());
+                            intent.putExtra("TRIP_DATE_OF_TRIP", trips.getDateOfTrip());
+                            intent.putExtra("DESTINATION", trips.getDestination());
+                            intent.putExtra("RISK_ASSESS",trips.getRiskAssessOption());
+                            intent.putExtra("DESCRIPTION",trips.getDescription());
+                            intent.putExtra("TRIP_ESTIMATED_SPENDING", trips.getEstimatedSpending());
+                            intent.putExtra("TRIP_TYPE", trips.getTripTypeOption());
+                            startActivity(intent);
+                            break;
+
+                        case 1:
+                            Intent addExpenseIntent = new Intent(this, AddExpenseActivity.class);
+                            addExpenseIntent.putExtra("TripId", trips.getTripId());
+                            addExpenseIntent.putExtra("Trip_Name", trips.getTripName());
+                            startActivity(addExpenseIntent);
+                            break;
+
+                        case 2:
+                            showDeleteConfirmation(trips);
+                            break;
+                    }
+                }))
+        .show();
     }
 
-    @Override
+    private void showDeleteConfirmation(Trips trips){
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        dialog.setTitle("Confirm Delete");
+        dialog.setMessage("Delete Trip: " + trips.getTripName() + "?");
+        dialog.setPositiveButton("OK", new DialogInterface.OnClickListener(){
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (db.deleteTrips(trips)) {
+                    refreshTripList();
+                } else {
+                    Toast.makeText(getApplicationContext(), "Failed to delete trip.", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        dialog.setNegativeButton("Cancel", null);
+        dialog.show();
+    }
+    /*@Override
     public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) { // DELETE
         Trips trips = (Trips) adapterView.getItemAtPosition(position);
 
@@ -113,5 +149,5 @@ public class TripListActivity extends AppCompatActivity implements View.OnClickL
         dialog.setNegativeButton("Cancel", null);
         dialog.show();
         return true;
-    }
+    }*/
 }
