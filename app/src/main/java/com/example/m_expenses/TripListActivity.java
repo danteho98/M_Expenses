@@ -47,9 +47,7 @@ public class TripListActivity extends AppCompatActivity implements View.OnClickL
         listTrip.setOnItemClickListener(this);
         //listTrip.setOnItemLongClickListener(this);
         findViewById(R.id.floatingAddActionButton).setOnClickListener(this);
-
     }
-
 
     public void refreshTripList() { // VIEW/SELECT
         Trips[] trips = db.getTrips();
@@ -97,7 +95,7 @@ public class TripListActivity extends AppCompatActivity implements View.OnClickL
 
                         case 1:
                             Intent addExpenseIntent = new Intent(this, AddExpenseActivity.class);
-                            addExpenseIntent.putExtra("TripId", trips.getTripId());
+                            addExpenseIntent.putExtra("Trip_ID", trips.getTripId());
                             addExpenseIntent.putExtra("Trip_Name", trips.getTripName());
                             startActivity(addExpenseIntent);
                             break;
@@ -127,27 +125,4 @@ public class TripListActivity extends AppCompatActivity implements View.OnClickL
         dialog.setNegativeButton("Cancel", null);
         dialog.show();
     }
-    /*@Override
-    public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) { // DELETE
-        Trips trips = (Trips) adapterView.getItemAtPosition(position);
-
-        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-        dialog.setTitle("Confirm Delete");
-        dialog.setMessage("Proceed?");
-        dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                if (db.deleteTrips(trips)) {
-                    refreshTripList();
-                }
-                else {
-                    Toast.makeText(
-                            getApplicationContext(), "Failed to delete trips.", Toast.LENGTH_LONG).show();
-                }
-            }
-        });
-        dialog.setNegativeButton("Cancel", null);
-        dialog.show();
-        return true;
-    }*/
 }
