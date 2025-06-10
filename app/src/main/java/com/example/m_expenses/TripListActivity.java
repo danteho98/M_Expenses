@@ -77,7 +77,7 @@ public class TripListActivity extends AppCompatActivity implements View.OnClickL
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(trips.getTripName())
-                .setItems(new String[]{"View/Edit Trip", "Add Expense", "Delete Trip"},
+                .setItems(new String[]{"View/Edit Trip", "View Expense", "Delete Trip"},
                         ((dialog, which) -> {
                     switch (which){
                         case 0:
@@ -94,10 +94,10 @@ public class TripListActivity extends AppCompatActivity implements View.OnClickL
                             break;
 
                         case 1:
-                            Intent addExpenseIntent = new Intent(this, AddExpenseActivity.class);
-                            addExpenseIntent.putExtra("Trip_ID", trips.getTripId());
-                            addExpenseIntent.putExtra("Trip_Name", trips.getTripName());
-                            startActivity(addExpenseIntent);
+                            Intent viewExpenseIntent = new Intent(this, ExpenseListActivity.class);
+                            viewExpenseIntent.putExtra("Trip_ID", trips.getTripId());
+                            viewExpenseIntent.putExtra("Trip_Name", trips.getTripName());
+                            startActivity(viewExpenseIntent);
                             break;
 
                         case 2:
