@@ -3,30 +3,30 @@ package com.example.m_expenses;
 public class Trips {
     public static final int NEW_TRIP = -1;
 
-    private int Id;
+    private int TripId;
     private String TripName;
     private long DateOfTrip;
-    private String Destination;
+    private String TripDestination;
     private String RiskAssessOption;
-    private String Description;
+    private String TripDescription;
     private int EstimatedSpending;
     private String TripTypeOption;
 
-    public Trips(int Id, String TripName, long DateOfTrip, String Destination,
-            String RiskAssessOption, String Description, int EstimatedSpending, String TripTypeOption) {
+    public Trips(int TripId, String TripName, long DateOfTrip, String TripDestination,
+            String RiskAssessOption, String TripDescription, int EstimatedSpending, String TripTypeOption) {
 
-        setTripId(Id);
+        setTripId(TripId);
         setTripName(TripName);
         setDateOfTrip(DateOfTrip);
-        setDestination(Destination);
+        setTripDestination(TripDestination);
         setRiskAssessOption(RiskAssessOption);
-        setDescription(Description);
+        setTripDescription(TripDescription);
         setEstimatedSpending(EstimatedSpending);
         setTripTypeOption(TripTypeOption);
     }
 
-    public int getTripId() { return Id; }
-    public void setTripId(int Id) { this.Id = Id; }
+    public int getTripId() { return TripId; }
+    public void setTripId(int Id) { this.TripId = TripId; }
 
     public String getTripName() { return TripName; }
     public void setTripName(String TripName) { this.TripName = TripName; }
@@ -34,14 +34,14 @@ public class Trips {
     public long getDateOfTrip() { return DateOfTrip; }
     public void setDateOfTrip(long DateOfTrip) { this.DateOfTrip = DateOfTrip; }
 
-    public String getDestination(){return  Destination;}
-    public void setDestination(String Destination){this.Destination = Destination;}
+    public String getTripDestination(){return getTripDestination();}
+    public void setTripDestination(String TripDestination){this.TripDestination = TripDestination;}
 
     public String getRiskAssessOption() {return RiskAssessOption;}
     public void setRiskAssessOption(String RiskAssessOption) {this.RiskAssessOption = RiskAssessOption;}
 
-    public String getDescription() {return Description;}
-    public void setDescription(String Description) {this.Description = Description;}
+    public String getTripDescription() {return TripDescription;}
+    public void setTripDescription(String TripDescription) {this.TripDescription = TripDescription;}
 
     public int getEstimatedSpending() { return EstimatedSpending; }
     public void setEstimatedSpending(int EstimatedSpending) { this.EstimatedSpending = EstimatedSpending; }
