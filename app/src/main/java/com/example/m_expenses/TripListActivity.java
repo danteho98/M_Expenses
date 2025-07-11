@@ -85,9 +85,9 @@ public class TripListActivity extends AppCompatActivity implements View.OnClickL
                             intent.putExtra("TRIP_ID", trips.getTripId());
                             intent.putExtra("TRIP_NAME", trips.getTripName());
                             intent.putExtra("TRIP_DATE_OF_TRIP", trips.getDateOfTrip());
-                            intent.putExtra("DESTINATION", trips.getDestination());
+                            intent.putExtra("TRIP_DESTINATION", trips.getTripDestination());
                             intent.putExtra("RISK_ASSESS",trips.getRiskAssessOption());
-                            intent.putExtra("DESCRIPTION",trips.getDescription());
+                            intent.putExtra("TRIP_DESCRIPTION",trips.getTripDescription());
                             intent.putExtra("TRIP_ESTIMATED_SPENDING", trips.getEstimatedSpending());
                             intent.putExtra("TRIP_TYPE", trips.getTripTypeOption());
                             startActivity(intent);
