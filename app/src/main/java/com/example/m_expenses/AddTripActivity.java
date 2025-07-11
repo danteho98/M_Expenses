@@ -83,8 +83,8 @@ public class AddTripActivity extends AppCompatActivity implements View.OnClickLi
                     tripDateEditText.setText(formattedDate);
                 }
 
-                destination_text.setText(existingTrip.getDestination());
-                description_text.setText(existingTrip.getDescription());
+                destination_text.setText(existingTrip.getTripDestination());
+                description_text.setText(existingTrip.getTripDescription());
                 estimated_spending_text.setText(String.valueOf(existingTrip.getEstimatedSpending()));
 
                 // Pre-select the corresponding radio buttons
