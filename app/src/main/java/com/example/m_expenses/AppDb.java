@@ -30,17 +30,19 @@ public class AppDb extends SQLiteOpenHelper {
     private static final String COLUMN_TRIP_TYPE = "TripType";
 
     private static final String CREATE_TABLE_EXPENSES = "CREATE TABLE IF NOT EXISTS `Expenses` (" +
-            "`ExpenseId` INTEGER PRIMARY KEY AUTOINCREMENT, " +
-            "`TripId` INTEGER, `ExpenseName` TEXT, `Date` NUMERIC, `ExpenseType` TEXT, `Amount` REAL, `Comments` TEXT," +
+            "`ExpenseId` INTEGER PRIMARY KEY AUTOINCREMENT, `TripId` INTEGER, " +
+            "`ExpenseName` TEXT, `Date` NUMERIC, `ExpenseType` TEXT, " +
+            "`Amount` REAL, `Comments` TEXT," +
             "FOREIGN KEY(TripId) REFERENCES Trips(TripId))";
 
     private static final String COLUMN_EXPENSE_ID = "ExpenseId";
-    private static final String COLUMN_EXPENSETRIP_ID = "TripId";
+    private static final String COLUMN_EXPENSE_TRIP_ID = "TripId";
     private static final String COLUMN_EXPENSE_NAME = "ExpenseName";
+    private static final String COLUMN_EXPENSE_DATE = "ExpenseDate";
     private static final String COLUMN_EXPENSE_TYPE = "ExpenseType";
     private static final String COLUMN_EXPENSE_AMOUNT = "Amount";
-    private static final String COLUMN_EXPENSE_DATE = "Date";
-    private static final String COLUMN_EXPENSE_COMMENTS = "Comments";
+    private static final String COLUMN_EXPENSE_LOCATION = "Location";
+    private static final String COLUMN_EXPENSE_DESCRIPTION = "ExpenseDescription";
 
     private static final String TABLE_TRIP = "Trips";
     private static final String TABLE_EXPENSES = "Expenses";
@@ -67,9 +69,9 @@ public class AppDb extends SQLiteOpenHelper {
 
         cv.put(COLUMN_TRIP_NAME, trips.getTripName());
         cv.put(COLUMN_TRIP_DATE_OF_TRIP, trips.getDateOfTrip());
-        cv.put(COLUMN_TRIP_DESTINATION, trips.getDestination());
+        cv.put(COLUMN_TRIP_DESTINATION, trips.getTripDestination());
         cv.put(COLUMN_TRIP_RISK_ASSESS, trips.getRiskAssessOption());
-        cv.put(COLUMN_TRIP_DESCRIPTION, trips.getDescription());
+        cv.put(COLUMN_TRIP_DESCRIPTION, trips.getTripDescription());
         cv.put(COLUMN_TRIP_ESTIMATED_SPENDING, trips.getEstimatedSpending());
         cv.put(COLUMN_TRIP_TYPE, trips.getTripTypeOption());
 
@@ -104,9 +106,9 @@ public class AppDb extends SQLiteOpenHelper {
         ContentValues cv = new ContentValues();
         cv.put(COLUMN_TRIP_NAME, trips.getTripName());
         cv.put(COLUMN_TRIP_DATE_OF_TRIP, trips.getDateOfTrip());
-        cv.put(COLUMN_TRIP_DESTINATION, trips.getDestination());
+        cv.put(COLUMN_TRIP_DESTINATION, trips.getTripDestination());
         cv.put(COLUMN_TRIP_RISK_ASSESS, trips.getRiskAssessOption());
-        cv.put(COLUMN_TRIP_DESCRIPTION, trips.getDescription());
+        cv.put(COLUMN_TRIP_DESCRIPTION, trips.getTripDescription());
         cv.put(COLUMN_TRIP_ESTIMATED_SPENDING, trips.getEstimatedSpending());
         cv.put(COLUMN_TRIP_TYPE, trips.getTripTypeOption());
 
@@ -205,15 +207,14 @@ public class AppDb extends SQLiteOpenHelper {
 
     public boolean addExpense(Expenses expenses) {
         boolean isAdded = false;
-        Log.d("AppDb", "Adding expense with TripId: " + expenses.getTripId());
+        Log.d("AppDb", "Adding expense with TripId: " + expenses.getExpenseId());
         ContentValues cv = new ContentValues();
-        cv.put(COLUMN_EXPENSETRIP_ID, expenses.getTripId());
+        cv.put(COLUMN_EXPENSE_TRIP_ID, expenses.getTripId());
         cv.put(COLUMN_EXPENSE_NAME, expenses.getExpenseName());
-        cv.put(COLUMN_EXPENSE_DATE, expenses.getExpenseDate());
-        cv.put(COLUMN_EXPENSE_TYPE, expenses.getExpenseTypeOption());
+        cv.put(COLUMN_EXPENSE_DATE, expenses.getDateOfExpense());
+        cv.put(COLUMN_EXPENSE_TYPE, expenses.getExpenseType());
         cv.put(COLUMN_EXPENSE_AMOUNT, expenses.getAmount());
-        cv.put(COLUMN_EXPENSE_COMMENTS, expenses.getComment());
-
+        cv.put(COLUMN_EXPENSE_DESCRIPTION, expenses.getExpenseDescription());
 
         SQLiteDatabase db = getWritableDatabase();
         isAdded = db.insert(TABLE_EXPENSES, null, cv) != -1;
@@ -242,12 +243,13 @@ public class AppDb extends SQLiteOpenHelper {
 
         // ContentValues for the updated trip data
         ContentValues cv = new ContentValues();
-        cv.put(COLUMN_EXPENSETRIP_ID, expenses.getTripId());
+        cv.put(COLUMN_EXPENSE_TRIP_ID, expenses.getExpenseId());
         cv.put(COLUMN_EXPENSE_NAME, expenses.getExpenseName());
-        cv.put(COLUMN_EXPENSE_DATE, expenses.getExpenseDate());
-        cv.put(COLUMN_EXPENSE_TYPE, expenses.getExpenseTypeOption());
+        cv.put(COLUMN_EXPENSE_DATE, expenses.getDateOfExpense());
+        cv.put(COLUMN_EXPENSE_TYPE, expenses.getExpenseType());
         cv.put(COLUMN_EXPENSE_AMOUNT, expenses.getAmount());
-        cv.put(COLUMN_EXPENSE_COMMENTS, expenses.getComment());
+        cv.put(COLUMN_EXPENSE_LOCATION, expenses.getExpenseLocation());
+        cv.put(COLUMN_EXPENSE_DESCRIPTION, expenses.getExpenseDescription());
 
         // Corrected whereClause (use correct column name 'TripId' instead of 'Id')
         String whereClause = COLUMN_EXPENSE_ID + " = ?";
@@ -271,10 +273,10 @@ public class AppDb extends SQLiteOpenHelper {
     public Expenses[] getExpenses() {
         Expenses[] expenses = null;  // Default to an empty array instead of null
 
-        String[] COLUMNS = {COLUMN_EXPENSE_ID, COLUMN_EXPENSETRIP_ID,
+        String[] COLUMNS = {COLUMN_EXPENSE_ID, COLUMN_EXPENSE_TRIP_ID,
                 COLUMN_EXPENSE_NAME, COLUMN_EXPENSE_DATE,
                 COLUMN_EXPENSE_TYPE, COLUMN_EXPENSE_AMOUNT,
-                COLUMN_EXPENSE_COMMENTS
+                COLUMN_EXPENSE_LOCATION, COLUMN_EXPENSE_DESCRIPTION
 
         };
         String orderBy = COLUMN_EXPENSE_NAME;
@@ -293,10 +295,14 @@ public class AppDb extends SQLiteOpenHelper {
 
             do {
                 expenses[index] = new Expenses(
-                        cursor.getInt(0), cursor.getInt(1),
-                        cursor.getString(2), cursor.getLong(3),
-                        cursor.getString(4), cursor.getDouble(5),
-                        cursor.getString(6)
+                        cursor.getInt(0), // Expense ID
+                        cursor.getInt(1), // Trip ID
+                        cursor.getString(2), // Expense Name
+                        cursor.getLong(3), // Expense Date
+                        cursor.getString(4), // Expense Type
+                        cursor.getFloat(5), // Expense Amount
+                        cursor.getString(6), // Expense Location
+                        cursor.getString(7) // Expense Description
                 );
                 index++;
             } while(cursor.moveToNext());
@@ -310,10 +316,10 @@ public class AppDb extends SQLiteOpenHelper {
     public Expenses getExpenseById(int expenseId){
         Expenses expense = null;
 
-        String[] COLUMNS = {COLUMN_EXPENSE_ID, COLUMN_EXPENSETRIP_ID,
+        String[] COLUMNS = {COLUMN_EXPENSE_ID, COLUMN_EXPENSE_TRIP_ID,
                 COLUMN_EXPENSE_NAME, COLUMN_EXPENSE_DATE,
                 COLUMN_EXPENSE_TYPE, COLUMN_EXPENSE_AMOUNT,
-                COLUMN_EXPENSE_COMMENTS
+                COLUMN_EXPENSE_LOCATION, COLUMN_EXPENSE_DESCRIPTION
         };
 
         String selection = COLUMN_EXPENSE_ID + " = ?";
@@ -329,10 +335,14 @@ public class AppDb extends SQLiteOpenHelper {
 
         if (cursor.getCount() > 0 && cursor.moveToFirst()) {
             expense = new Expenses(
-                    cursor.getInt(0), cursor.getInt(1),
-                    cursor.getString(2), cursor.getLong(3),
-                    cursor.getString(4), cursor.getDouble(5),
-                    cursor.getString(6)
+                    cursor.getInt(0), // Expense ID
+                    cursor.getInt(1), // Trip ID
+                    cursor.getString(2), // Expense Name
+                    cursor.getLong(3), // Expense Date
+                    cursor.getString(4), // Expense Type
+                    cursor.getFloat(5), // Expense Amount
+                    cursor.getString(6), // Expense Location
+                    cursor.getString(7) // Expense Description
             );
         }
         cursor.close();
@@ -345,12 +355,12 @@ public class AppDb extends SQLiteOpenHelper {
     public Expenses[] getExpensesByTripId(int tripId) {
         Expenses[] expenses = null;
 
-        String[] COLUMNS = {COLUMN_EXPENSE_ID, COLUMN_EXPENSETRIP_ID,
+        String[] COLUMNS = {COLUMN_EXPENSE_ID, COLUMN_EXPENSE_TRIP_ID,
                 COLUMN_EXPENSE_NAME, COLUMN_EXPENSE_DATE,
                 COLUMN_EXPENSE_TYPE, COLUMN_EXPENSE_AMOUNT,
-                COLUMN_EXPENSE_COMMENTS};
+                COLUMN_EXPENSE_LOCATION, COLUMN_EXPENSE_DESCRIPTION};
 
-        String selection = COLUMN_EXPENSETRIP_ID + " = ?";
+        String selection = COLUMN_EXPENSE_TRIP_ID + " = ?";
         String[] selectionArgs = {String.valueOf(tripId)};
         String orderBy = COLUMN_EXPENSE_NAME;
 
@@ -371,8 +381,9 @@ public class AppDb extends SQLiteOpenHelper {
                         cursor.getString(2), // Expense Name
                         cursor.getLong(3), // Expense Date
                         cursor.getString(4), // Expense Type
-                        cursor.getDouble(5), // Expense Amount
-                        cursor.getString(6) // Expense Comments
+                        cursor.getFloat(5), // Expense Amount
+                        cursor.getString(6), // Expense Location
+                        cursor.getString(7) // Expense Description
                 );
             }
         }
